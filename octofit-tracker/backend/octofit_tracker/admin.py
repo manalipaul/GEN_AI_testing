@@ -1,36 +1,27 @@
 from django.contrib import admin
-from .models import Profile, Team, Activity, WorkoutSuggestion, Leaderboard, Workout
+from .models import User, Team, Workout, Activity, Leaderboard
 
-@admin.register(Workout)
-class WorkoutAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'created_at')
-    search_fields = ('name', 'description')
-
-
-@admin.register(Leaderboard)
-class LeaderboardAdmin(admin.ModelAdmin):
-    list_display = ('team', 'points', 'updated_at')
-    search_fields = ('team__name',)
-
-
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'age', 'height_cm', 'weight_kg')
-
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'team')
+    search_fields = ('name', 'email')
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owner', 'created_at')
-    filter_horizontal = ('members',)
+    list_display = ('name', 'description')
+    search_fields = ('name',)
 
+@admin.register(Workout)
+class WorkoutAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    search_fields = ('name',)
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('user', 'type', 'duration_minutes', 'calories_burned', 'timestamp')
-    list_filter = ('type', 'timestamp')
+    list_display = ('user', 'workout', 'date', 'duration')
+    search_fields = ('user__email', 'workout__name')
 
-
-@admin.register(WorkoutSuggestion)
-class WorkoutSuggestionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'difficulty', 'created_at')
-    search_fields = ('title', 'description')
+@admin.register(Leaderboard)
+class LeaderboardAdmin(admin.ModelAdmin):
+    list_display = ('user', 'score')
+    search_fields = ('user__email',)

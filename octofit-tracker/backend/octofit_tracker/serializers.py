@@ -1,55 +1,31 @@
-from .models import Profile, Team, Activity, WorkoutSuggestion, Leaderboard, Workout
+from rest_framework import serializers
+from .models import User, Team, Workout, Activity, Leaderboard
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    team = TeamSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = '__all__'
 
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
-        fields = ['id', 'name', 'description', 'created_at']
-
-
-class LeaderboardSerializer(serializers.ModelSerializer):
-    team = TeamSerializer(read_only=True)
-
-    class Meta:
-        model = Leaderboard
-        fields = ['id', 'team', 'points', 'updated_at']
-from django.contrib.auth.models import User
-from rest_framework import serializers
-from .models import Profile, Team, Activity, WorkoutSuggestion
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ['id', 'user', 'bio', 'age', 'height_cm', 'weight_kg']
-
-
-class TeamSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True)
-    members = UserSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Team
-        fields = ['id', 'name', 'description', 'owner', 'members', 'created_at']
-
+        fields = '__all__'
 
 class ActivitySerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    team = TeamSerializer(read_only=True)
-
+    workout = WorkoutSerializer(read_only=True)
     class Meta:
         model = Activity
-        fields = ['id', 'user', 'team', 'type', 'duration_minutes', 'distance_km', 'calories_burned', 'timestamp']
+        fields = '__all__'
 
-
-class WorkoutSuggestionSerializer(serializers.ModelSerializer):
+class LeaderboardSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
-        model = WorkoutSuggestion
-        fields = ['id', 'title', 'description', 'difficulty', 'target_muscles', 'created_at']
+        model = Leaderboard
+        fields = '__all__'
