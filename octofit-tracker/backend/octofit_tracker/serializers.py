@@ -1,3 +1,17 @@
+from .models import Profile, Team, Activity, WorkoutSuggestion, Leaderboard, Workout
+
+class WorkoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Workout
+        fields = ['id', 'name', 'description', 'created_at']
+
+
+class LeaderboardSerializer(serializers.ModelSerializer):
+    team = TeamSerializer(read_only=True)
+
+    class Meta:
+        model = Leaderboard
+        fields = ['id', 'team', 'points', 'updated_at']
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Profile, Team, Activity, WorkoutSuggestion

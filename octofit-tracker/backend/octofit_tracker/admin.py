@@ -1,5 +1,16 @@
 from django.contrib import admin
-from .models import Profile, Team, Activity, WorkoutSuggestion
+from .models import Profile, Team, Activity, WorkoutSuggestion, Leaderboard, Workout
+
+@admin.register(Workout)
+class WorkoutAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'created_at')
+    search_fields = ('name', 'description')
+
+
+@admin.register(Leaderboard)
+class LeaderboardAdmin(admin.ModelAdmin):
+    list_display = ('team', 'points', 'updated_at')
+    search_fields = ('team__name',)
 
 
 @admin.register(Profile)

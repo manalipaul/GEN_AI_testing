@@ -5,14 +5,27 @@ from rest_framework import generics, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Activity, Profile, Team, WorkoutSuggestion
+from .models import Activity, Profile, Team, WorkoutSuggestion, Leaderboard, Workout
 from .serializers import (
     ActivitySerializer,
     ProfileSerializer,
     TeamSerializer,
     UserSerializer,
     WorkoutSuggestionSerializer,
+    LeaderboardSerializer,
+    WorkoutSerializer,
 )
+
+class WorkoutViewSet(viewsets.ModelViewSet):
+    queryset = Workout.objects.all()
+    serializer_class = WorkoutSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class LeaderboardViewSet(viewsets.ModelViewSet):
+    queryset = Leaderboard.objects.select_related('team').all()
+    serializer_class = LeaderboardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
